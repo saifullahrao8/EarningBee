@@ -21,10 +21,25 @@ export interface UserInput {
   preference: 'online' | 'offline' | 'both';
 }
 
+export interface UserProfile {
+  id: string;
+  name: string;
+  email: string;
+  profileImage: string;
+  bio: string;
+  joinedDate: Date;
+  preferences: {
+    notifications: boolean;
+    darkMode: boolean;
+    language: string;
+  };
+}
+
 export interface User {
   privateKey: string;
   faceScanned: boolean;
   createdAt: Date;
+  profile: UserProfile;
 }
 
 export interface ActivityData {
