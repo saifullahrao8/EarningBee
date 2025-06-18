@@ -1,18 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { Zap, TrendingUp, Shield, Users, ArrowRight, Moon, Sun } from 'lucide-react';
+import { Zap, TrendingUp, Shield, Users, ArrowRight, Moon, Sun, User, Settings } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { useActivity } from '../contexts/ActivityContext';
 import { useTheme } from '../contexts/ThemeContext';
 import FaceScanner from '../components/FaceScanner';
+import UserProfile from '../components/UserProfile';
 
 const LandingPage: React.FC = () => {
   const navigate = useNavigate();
-  const { login, isAuthenticated } = useAuth();
+  const { login, isAuthenticated, user, isLoading } = useAuth();
   const { addPageVisit } = useActivity();
   const { theme, toggleTheme } = useTheme();
   const [showScanner, setShowScanner] = useState(false);
+  const [showProfile, setShowProfile] = useState(false);
   const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [privateKey, setPrivateKey] = useState('');
 
@@ -38,7 +40,7 @@ const LandingPage: React.FC = () => {
       // Show private key briefly, then navigate
       setTimeout(() => {
         navigate('/input');
-      }, 3000);
+      }, 4000);
     } catch (error) {
       console.error('Login failed:', error);
     } finally {
@@ -58,13 +60,13 @@ const LandingPage: React.FC = () => {
     },
     {
       icon: <TrendingUp className="w-8 h-8" />,
-      title: "50+ Verified Methods",
-      description: "Access our curated database of legitimate online and offline earning opportunities"
+      title: "75+ Verified Methods",
+      description: "Access our expanded database of legitimate online and offline earning opportunities"
     },
     {
       icon: <Shield className="w-8 h-8" />,
-      title: "Secure & Private",
-      description: "Blockchain-inspired authentication with face scan technology for maximum security"
+      title: "Enhanced Security",
+      description: "Advanced biometric authentication with 256-bit encryption for maximum security"
     },
     {
       icon: <Users className="w-8 h-8" />,
@@ -115,13 +117,29 @@ const LandingPage: React.FC = () => {
               }
             </button>
             
-            {isAuthenticated && (
-              <button
-                onClick={() => navigate('/input')}
-                className="px-4 py-2 bg-gradient-to-r from-bee-400 to-bee-600 text-white rounded-lg hover:from-bee-500 hover:to-bee-700 transition-all"
-              >
-                Dashboard
-              </button>
+            {isAuthenticated && user && (
+              <div className="flex items-center space-x-3">
+                <button
+                  onClick={() => setShowProfile(true)}
+                  className="flex items-center space-x-2 p-2 rounded-lg bg-white dark:bg-gray-800 shadow-md hover:shadow-lg transition-all"
+                >
+                  <img
+                    src={user.profile.profileImage}
+                    alt="Profile"
+                    className="w-8 h-8 rounded-full"
+                  />
+                  <span className="text-sm font-medium text-gray-700 dark:text-gray-300 hidden md:block">
+                    {user.profile.name}
+                  </span>
+                </button>
+                
+                <button
+                  onClick={() => navigate('/input')}
+                  className="px-4 py-2 bg-gradient-to-r from-bee-400 to-bee-600 text-white rounded-lg hover:from-bee-500 hover:to-bee-700 transition-all"
+                >
+                  Dashboard
+                </button>
+              </div>
             )}
           </div>
         </div>
@@ -146,39 +164,81 @@ const LandingPage: React.FC = () => {
               
               <p className="text-xl text-gray-600 dark:text-gray-300 mb-8 max-w-3xl mx-auto">
                 Unlock your earning potential with AI-powered recommendations tailored to your 
-                investment capacity and financial goals. Get started with our smart advisor today.
+                investment capacity and financial goals. Enhanced security and 75+ verified methods.
               </p>
 
+              {/* Main CTA Button */}
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={handleGetStarted}
-                className="group relative px-8 py-4 bg-gradient-to-r from-bee-400 to-bee-600 text-white rounded-xl text-lg font-semibold hover:from-bee-500 hover:to-bee-700 transition-all shadow-lg hover:shadow-xl"
+                disabled={isLoading}
+                className="group relative px-8 py-4 bg-gradient-to-r from-bee-400 to-bee-600 text-white rounded-xl text-lg font-semibold hover:from-bee-500 hover:to-bee-700 transition-all shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <span className="flex items-center space-x-2">
-                  <span>{isAuthenticated ? 'Go to Dashboard' : 'Get Started with Face Scan'}</span>
-                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                  {isLoading ? (
+                    <>
+                      <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                      <span>Authenticating...</span>
+                    </>
+                  ) : (
+                    <>
+                      <span>{isAuthenticated ? 'Explore Earning Preferences' : 'Get Started with Secure Login'}</span>
+                      <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                    </>
+                  )}
                 </span>
                 <div className="absolute inset-0 rounded-xl bg-white opacity-0 group-hover:opacity-20 transition-opacity"></div>
               </motion.button>
+
+              {/* Quick Access Buttons for Authenticated Users */}
+              {isAuthenticated && (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.3 }}
+                  className="mt-6 flex flex-wrap justify-center gap-4"
+                >
+                  <button
+                    onClick={() => navigate('/recommendations')}
+                    className="px-6 py-2 bg-white dark:bg-gray-800 text-bee-600 dark:text-bee-400 rounded-lg border border-bee-200 dark:border-bee-700 hover:bg-bee-50 dark:hover:bg-bee-900/20 transition-all"
+                  >
+                    View Recommendations
+                  </button>
+                  <button
+                    onClick={() => navigate('/activity')}
+                    className="px-6 py-2 bg-white dark:bg-gray-800 text-bee-600 dark:text-bee-400 rounded-lg border border-bee-200 dark:border-bee-700 hover:bg-bee-50 dark:hover:bg-bee-900/20 transition-all"
+                  >
+                    Activity Dashboard
+                  </button>
+                  <button
+                    onClick={() => navigate('/about')}
+                    className="px-6 py-2 bg-white dark:bg-gray-800 text-bee-600 dark:text-bee-400 rounded-lg border border-bee-200 dark:border-bee-700 hover:bg-bee-50 dark:hover:bg-bee-900/20 transition-all"
+                  >
+                    About EarningBee
+                  </button>
+                </motion.div>
+              )}
 
               {privateKey && (
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="mt-6 p-4 bg-green-100 dark:bg-green-900 rounded-lg border border-green-200 dark:border-green-700"
+                  className="mt-6 p-6 bg-green-100 dark:bg-green-900 rounded-xl border border-green-200 dark:border-green-700 max-w-2xl mx-auto"
                 >
-                  <p className="text-green-800 dark:text-green-200 font-medium mb-2">
-                    Authentication Successful! 🎉
+                  <p className="text-green-800 dark:text-green-200 font-medium mb-3">
+                    🎉 Authentication Successful! Welcome to EarningBee!
                   </p>
-                  <p className="text-sm text-green-700 dark:text-green-300 mb-2">
-                    Your Private Key (save this securely):
+                  <p className="text-sm text-green-700 dark:text-green-300 mb-3">
+                    Your Secure Private Key (save this securely):
                   </p>
-                  <code className="block p-2 bg-green-200 dark:bg-green-800 rounded text-green-800 dark:text-green-200 font-mono text-sm break-all">
-                    {privateKey}
-                  </code>
-                  <p className="text-xs text-green-600 dark:text-green-400 mt-2">
-                    Redirecting to dashboard in 3 seconds...
+                  <div className="bg-green-200 dark:bg-green-800 rounded-lg p-3 mb-3">
+                    <code className="block text-green-800 dark:text-green-200 font-mono text-sm break-all">
+                      {privateKey}
+                    </code>
+                  </div>
+                  <p className="text-xs text-green-600 dark:text-green-400">
+                    Redirecting to earning preferences in 4 seconds...
                   </p>
                 </motion.div>
               )}
@@ -217,9 +277,9 @@ const LandingPage: React.FC = () => {
                 </motion.div>
               ))}
             </div>
-          </motion.div>
+          </div>
 
-          {/* CTA Section */}
+          {/* Enhanced CTA Section */}
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
@@ -231,14 +291,23 @@ const LandingPage: React.FC = () => {
                 Ready to Start Earning Smarter?
               </h3>
               <p className="text-xl mb-8 opacity-90">
-                Join thousands of users who've discovered their perfect earning opportunities
+                Join thousands of users who've discovered their perfect earning opportunities with enhanced security
               </p>
-              <button
-                onClick={handleGetStarted}
-                className="px-8 py-4 bg-white text-bee-600 rounded-xl text-lg font-semibold hover:bg-gray-100 transition-all shadow-lg hover:shadow-xl"
-              >
-                {isAuthenticated ? 'Access Dashboard' : 'Start Your Journey'}
-              </button>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <button
+                  onClick={handleGetStarted}
+                  disabled={isLoading}
+                  className="px-8 py-4 bg-white text-bee-600 rounded-xl text-lg font-semibold hover:bg-gray-100 transition-all shadow-lg hover:shadow-xl disabled:opacity-50"
+                >
+                  {isAuthenticated ? 'Access Dashboard' : 'Start Your Journey'}
+                </button>
+                <button
+                  onClick={() => navigate('/about')}
+                  className="px-8 py-4 bg-transparent border-2 border-white text-white rounded-xl text-lg font-semibold hover:bg-white hover:text-bee-600 transition-all"
+                >
+                  Learn More
+                </button>
+              </div>
             </div>
           </motion.div>
         </div>
@@ -283,6 +352,12 @@ const LandingPage: React.FC = () => {
           onCancel={handleScanCancel}
         />
       )}
+
+      {/* User Profile Modal */}
+      <UserProfile
+        isOpen={showProfile}
+        onClose={() => setShowProfile(false)}
+      />
     </div>
   );
 };

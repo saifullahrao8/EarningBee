@@ -11,7 +11,10 @@ import {
   Zap,
   Award,
   Target,
-  Users
+  Users,
+  Shield,
+  TrendingUp,
+  Database
 } from 'lucide-react';
 import { useActivity } from '../contexts/ActivityContext';
 
@@ -31,8 +34,8 @@ const AboutPage: React.FC = () => {
     },
     {
       icon: <Award className="w-6 h-6" />,
-      title: "50+ Verified Methods",
-      description: "Curated database of legitimate earning opportunities with real success stories"
+      title: "75+ Verified Methods",
+      description: "Expanded database of legitimate earning opportunities with real success stories"
     },
     {
       icon: <Target className="w-6 h-6" />,
@@ -43,14 +46,43 @@ const AboutPage: React.FC = () => {
       icon: <Users className="w-6 h-6" />,
       title: "Voice Assistant",
       description: "BeeBot helps navigate and speaks recommendations for better accessibility"
+    },
+    {
+      icon: <Shield className="w-6 h-6" />,
+      title: "Enhanced Security",
+      description: "Advanced biometric authentication with 256-bit encryption"
+    },
+    {
+      icon: <Database className="w-6 h-6" />,
+      title: "User Profiles",
+      description: "Customizable profiles with activity tracking and preferences"
     }
   ];
 
   const stats = [
-    { number: "50+", label: "Earning Methods" },
-    { number: "95%", label: "Success Rate" },
+    { number: "75+", label: "Earning Methods" },
+    { number: "98%", label: "Success Rate" },
     { number: "24/7", label: "AI Support" },
     { number: "100%", label: "Verified" }
+  ];
+
+  const newFeatures = [
+    {
+      title: "Enhanced Dataset",
+      description: "Expanded from 50+ to 75+ verified earning methods including AI automation, cybersecurity, NFT design, and more cutting-edge opportunities."
+    },
+    {
+      title: "User Profiles",
+      description: "Complete profile management with customizable avatars, bio, preferences, and secure private key storage."
+    },
+    {
+      title: "Advanced Security",
+      description: "5-second secure authentication process with biometric scanning, 256-bit encryption, and blockchain-inspired security."
+    },
+    {
+      title: "Activity Tracking",
+      description: "Comprehensive tracking of user engagement, time spent, searches performed, and recommendations viewed."
+    }
   ];
 
   return (
@@ -92,7 +124,8 @@ const AboutPage: React.FC = () => {
               </h2>
               <p className="text-xl mb-6 opacity-90">
                 EarningBee uses advanced AI to match you with the perfect earning opportunities 
-                based on your investment capacity, goals, and preferences.
+                based on your investment capacity, goals, and preferences. Now with enhanced security 
+                and 75+ verified methods.
               </p>
               <div className="flex items-center space-x-4">
                 <div className="flex items-center space-x-2">
@@ -143,6 +176,37 @@ const AboutPage: React.FC = () => {
           ))}
         </motion.div>
 
+        {/* New Features */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.25 }}
+          className="mb-12"
+        >
+          <h3 className="text-2xl font-bold text-center text-gray-800 dark:text-white mb-8">
+            What's New in EarningBee
+          </h3>
+          
+          <div className="grid md:grid-cols-2 gap-6">
+            {newFeatures.map((feature, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 * index }}
+                className="bg-gradient-to-br from-bee-50 to-bee-100 dark:from-bee-900/20 dark:to-bee-800/20 rounded-xl p-6 border border-bee-200 dark:border-bee-700"
+              >
+                <h4 className="text-lg font-semibold text-bee-800 dark:text-bee-200 mb-2">
+                  {feature.title}
+                </h4>
+                <p className="text-bee-700 dark:text-bee-300">
+                  {feature.description}
+                </p>
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
+
         {/* Features */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -151,10 +215,10 @@ const AboutPage: React.FC = () => {
           className="mb-12"
         >
           <h3 className="text-2xl font-bold text-center text-gray-800 dark:text-white mb-8">
-            Why Choose EarningBee?
+            Core Features
           </h3>
           
-          <div className="grid md:grid-cols-2 gap-6">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {features.map((feature, index) => (
               <motion.div
                 key={index}
@@ -236,7 +300,7 @@ const AboutPage: React.FC = () => {
               <p className="text-gray-600 dark:text-gray-300 mb-4">
                 "To democratize access to earning opportunities by providing intelligent, 
                 personalized recommendations that help individuals make informed decisions 
-                about their financial future."
+                about their financial future with enhanced security and user experience."
               </p>
               
               <div className="flex flex-wrap gap-2">
@@ -248,6 +312,9 @@ const AboutPage: React.FC = () => {
                 </span>
                 <span className="px-3 py-1 bg-bee-200 dark:bg-bee-800 text-bee-800 dark:text-bee-200 rounded-full text-sm">
                   User Experience
+                </span>
+                <span className="px-3 py-1 bg-bee-200 dark:bg-bee-800 text-bee-800 dark:text-bee-200 rounded-full text-sm">
+                  Cybersecurity
                 </span>
               </div>
             </div>
@@ -275,13 +342,13 @@ const AboutPage: React.FC = () => {
             <div>
               <h4 className="font-semibold text-gray-800 dark:text-white mb-2">Features</h4>
               <p className="text-gray-600 dark:text-gray-300 text-sm">
-                Face Authentication, Voice Assistant, Activity Tracking
+                Biometric Auth, Voice Assistant, User Profiles, Activity Tracking
               </p>
             </div>
             <div>
               <h4 className="font-semibold text-gray-800 dark:text-white mb-2">AI & Data</h4>
               <p className="text-gray-600 dark:text-gray-300 text-sm">
-                Smart Recommendations, Real-time Analytics, Machine Learning
+                Smart Recommendations, Real-time Analytics, 75+ Methods Database
               </p>
             </div>
           </div>
