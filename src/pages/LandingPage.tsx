@@ -277,7 +277,7 @@ const LandingPage: React.FC = () => {
                 </motion.div>
               ))}
             </div>
-          </div>
+          </motion.div>
 
           {/* Enhanced CTA Section */}
           <motion.div
@@ -310,6 +310,7 @@ const LandingPage: React.FC = () => {
               </div>
             </div>
           </motion.div>
+
         </div>
 
         {/* Floating Elements */}
